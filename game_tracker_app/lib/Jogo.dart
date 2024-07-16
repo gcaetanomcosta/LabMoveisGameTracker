@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class Jogo {
   final int id;
-  final String user_id;
+  final int user_id;
   String? name;
   String? description;
   String? release_date;
