@@ -26,7 +26,7 @@ class _MeusJogosState extends State<MeusJogos> {
 
 
 
-    try {
+   /* try {
 
       List<Jogo> listaJogosUsuario = await ctrlJogos.getJogosUsuario(id);
 
@@ -42,7 +42,7 @@ class _MeusJogosState extends State<MeusJogos> {
 
 
   int nJogos = (await ctrlJogos.getJogosUsuario(await getIdUsuario())).length;
-
+*/
 
 
   //List<Jogo> listaJogosUsuario = await ctrlJogos.getJogosUsuario('');
@@ -86,7 +86,8 @@ class _MeusJogosState extends State<MeusJogos> {
           child: GridView.count(
             crossAxisCount: nJogosRows,
             children: List.generate(
-              nJogos,
+              //nJogos,
+              15,
               (index) => Card(
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 color: Colors.black,

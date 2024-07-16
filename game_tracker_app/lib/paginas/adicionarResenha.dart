@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:game_tracker_app/Jogo.dart';
 
 class AdicionarResenha extends StatefulWidget {
@@ -109,3 +109,4 @@ class _AdicionarResenhaState extends State<AdicionarResenha> {
 
   }
 }
+*/
