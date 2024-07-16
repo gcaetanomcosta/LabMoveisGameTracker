@@ -12,7 +12,7 @@ class ControladorJogos {
 
   Future<int> removerJogo(Jogo jogo) async {
     var db = await con.db;
-    int res = await db.delete("jogo", where: "id = ?", whereArgs: [jogo.id]);
+    int res = await db.delete("game", where: "id = ?", whereArgs: [jogo.id]);
     return res;
   }
 
@@ -46,7 +46,7 @@ class ControladorJogos {
     var db = await con.db;
 
     String sql = """
-      SELECT * FROM game';
+      SELECT * FROM game;
     """;
 
     var ret = await db.rawQuery(sql);
