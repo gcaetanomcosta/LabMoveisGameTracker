@@ -16,16 +16,18 @@ class MeusJogos extends StatefulWidget{
 }
 
 class _MeusJogosState extends State<MeusJogos> {
-  ControladorJogos ctrlJogos = ControladorJogos();
   
-  Future<int> getIdUsuario() async{
+  Future<List<Jogo>> getListaJogosUsuario() async{
     SharedPreferences preferencias = await SharedPreferences.getInstance();
     int id = preferencias.getInt('id')!;
-    return id;
+    ControladorJogos ctrlJogos = ControladorJogos();
+    return ctrlJogos.getJogosUsuario(id);
   }
+  
 
 
 
+  /*
     try {
 
       List<Jogo> listaJogosUsuario = await ctrlJogos.getJogosUsuario(id);
@@ -34,15 +36,10 @@ class _MeusJogosState extends State<MeusJogos> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
     }
-    
-    
-  
-  
-  }
 
 
   int nJogos = (await ctrlJogos.getJogosUsuario(await getIdUsuario())).length;
-
+  */
 
 
   //List<Jogo> listaJogosUsuario = await ctrlJogos.getJogosUsuario('');
@@ -65,8 +62,10 @@ class _MeusJogosState extends State<MeusJogos> {
       nJogosRows = 1;
     }
 
+    //ControladorJogos ctrlJogos = ControladorJogos();
+    //ctrlJogos.cadastrarJogo(Jogo(id:0921381, user_id:1266496943, name:'undertale', description: 'Jogo indie produzido por Toby Fox que conta a história de um mundo abaixo do nosso, cheio de magias e perigos.', release_date: '2015-09-15'));
+
     return Container(
-      
       child: Scaffold(
         appBar: AppBar(
           title:  Center(
@@ -81,20 +80,35 @@ class _MeusJogosState extends State<MeusJogos> {
           ),
           backgroundColor: Colors.amber,
         ),
-        body: Padding(
-          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-          child: GridView.count(
-            crossAxisCount: nJogosRows,
-            children: List.generate(
-              nJogos,
-              (index) => Card(
-                margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                color: Colors.black,
-                child: Center(child: Text('Item $index')),
-              ),
-            ),
-          )
+        body: FutureBuilder(
+          future: getListaJogosUsuario(),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            
+            return Padding(
+              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: GridView.count(
+                crossAxisCount: nJogosRows,
+                children: List.generate(
+                  snapshot.data!.length,
+                  (index) => Card(
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    color: Colors.red,
+                    //child: Center(child: Text('Item $index')),
+                    child: Center(child: 
+                      Text('Item $index')
+                    ),
+                  ),
+                ),
+              )
+            );
+          }
         )
+        
+        
+        
+        
+        
+        
       )
     );
   }

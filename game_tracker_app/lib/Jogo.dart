@@ -2,13 +2,13 @@ import 'dart:convert';
 
 class Jogo {
   final int id;
-  final String user_id;
+  final int user_id;
   String? name;
   String? description;
   String? release_date;
   
 
-  Jogo({required this.id, required this.user_id, this.name, this.description, this.release_date});
+  Jogo({required this.id, required this.user_id, required this.name, required this.description, required this.release_date});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic> {

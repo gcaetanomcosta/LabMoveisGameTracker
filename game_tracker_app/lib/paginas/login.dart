@@ -3,6 +3,7 @@ import 'package:game_tracker_app/controladores/ControladorUsuario.dart';
 import 'package:game_tracker_app/paginas/meusJogos.dart';
 import 'package:game_tracker_app/Usuario.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import "package:sqflite/sqflite.dart";
 
 enum LoginStatus { notSignIn, signIn }
 
@@ -65,6 +66,9 @@ class _Login extends State<Login> {
     print(email);
     print(senha);
     print(id);
+    final databasePath = await getDatabasesPath();
+    print(databasePath);
+
 
     setState(() {
       preferencias.setInt("value", value);

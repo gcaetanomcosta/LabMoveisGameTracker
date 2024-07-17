@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker_app/Jogo.dart';
+import 'package:game_tracker_app/Review.dart';
+import 'package:game_tracker_app/controladores/ControladorJogos.dart';
+import 'package:game_tracker_app/controladores/ControladorReview.dart';
+
+
+import 'package:game_tracker_app/paginas/adicionarResenha.dart';
 
 class PageJogo extends StatefulWidget {
  
   Jogo jogoSelecionado;
-  
+    
   PageJogo(this.jogoSelecionado); 
 
   @override
@@ -12,6 +18,12 @@ class PageJogo extends StatefulWidget {
 }
 
 class _PageJogoState extends State<PageJogo> {
+  Future<List<Review>> getResenhasJogo() async{
+    int game_id = widget.jogoSelecionado.id;
+    ControladorReview ctrlResenha = ControladorReview();
+    return ctrlResenha.getReviewsJogo(game_id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,17 +107,18 @@ class _PageJogoState extends State<PageJogo> {
                     ),
 
                    SizedBox(height: 10),
-                    //Futuro botão de adicionar review e adicionar rota
-                    /*SizedBox(
+                    //Botao de adicionar review e adicionar rota
+                    SizedBox(
                         width: 200,
                         child: ElevatedButton(
-                        onPressed: () => Navigator.pushNamed(context, .rota),
-                        child: Text("Adicionar Review")),
-                    ),*/
+                        onPressed: () => Navigator.pushNamed(context, AdicionarResenha.rota),
+                        child: Text("Adicionar Review")
+                        ),
+                    ),
 
                     SizedBox(height: 30),
 
-                    //Adicionar reviews recentes somente SE ----------------------------------------- tiver reviews, pra comecar
+                    //Adicionar reviews recentes somente SE ------------------------------ tiver reviews
                     Text(
                         "REVIEWS RECENTES",
                         style: TextStyle(
@@ -115,31 +128,53 @@ class _PageJogoState extends State<PageJogo> {
                     ),
 
                     //Usando modelo do alerta dengue Lista de reviews
-                    /*
-                    Expanded(
-                        flex: 2,
-                        child: ListView.builder(
-                            itemCount: reviews!.length,
-                            itemBuilder: (context, index) {
-                                Review reviews = reviews[index];
-                                //dynamic SE = review.SE;
+                    
+                    FutureBuilder(
+                        future: getResenhasJogo(),
+                        builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                            case ConnectionState.none:
+                            case ConnectionState.waiting:
+                                return Center(child: CircularProgressIndicator());
+                            case ConnectionState.active:
+                            case ConnectionState.done:
+                                if (snapshot.hasError) {
+                                    print("Erro ao carregar");
+                                    break;
+                                } else {
+                                    //List<Review>? resenhas = snapshot.data?.cast<Review>();
+                                    dynamic resenhas = getReviewsJogo();
 
-                                return Card(
-                                    child: ListTile(
-                                    title: Text('Semana $SE'),
-                                    subtitle: Text(
-                                        'Usuário: $ca\n Nota: $casos_est \n Descrição: $level \n'),
-                                    isThreeLine: true,
-                                    ),
-                                );
-                            }
-                        )
-                    );*/
+                                    return Expanded(
+                                        flex: 2,
+                                        child: ListView.builder(
+                                            
+                                            itemCount: resenhas!.length,
+                                            itemBuilder: (context, index) {
+                                                Review review = resenhas[index];
+                                                //dynamic num = review.SE;
 
-
-                ],
-
-
+                                                return Card(
+                                                    child: ListTile(
+                                                    title: Text('Resenha $review.id'),
+                                                    subtitle: Text(
+                                                        'User: $review.user_id\n Nota: $ review.score \n Descrição: $review.description \n'),
+                                                    isThreeLine: true,
+                                                    ),
+                                                );
+                                            }
+                                        )
+                                    );
+                                }
+                           
+                            return Text(
+                                "Erro ao carregar. Verifique se todos os dados foram preenchidos");
+                            });
+                        }
+                    }
+            
+        
+                ]
             )
         )
     );

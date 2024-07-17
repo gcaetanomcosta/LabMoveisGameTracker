@@ -46,7 +46,7 @@ class ControladorJogos {
     var db = await con.db;
 
     String sql = """
-      SELECT * FROM game';
+      SELECT * FROM game;
     """;
 
     var ret = await db.rawQuery(sql);
