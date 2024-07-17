@@ -6,6 +6,8 @@ import 'package:game_tracker_app/paginas/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
+  static const String rota = "/home";
+
   State<Home> createState() => _Home();
 }
 
