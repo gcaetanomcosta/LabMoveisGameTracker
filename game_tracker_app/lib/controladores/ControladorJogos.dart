@@ -12,7 +12,7 @@ class ControladorJogos {
 
   Future<int> removerJogo(Jogo jogo) async {
     var db = await con.db;
-    int res = await db.delete("jogo", where: "id = ?", whereArgs: [jogo.id]);
+    int res = await db.delete("game", where: "id = ?", whereArgs: [jogo.id]);
     return res;
   }
 
