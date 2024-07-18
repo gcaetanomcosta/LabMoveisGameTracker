@@ -40,4 +40,23 @@ class ControladorReview {
 
     return reviews;
   }
+/*
+  //Adicionando para pegar o valor das medias
+  Future<double> getMediaReviews(int game_id) async{
+    var db = await con.db;
+    double valorMedia = 0.0;
+    
+    
+    String sql = """
+      SELECT AVG(score) FROM review WHERE game_id = '${game_id}';
+    """;
+    
+    var ret = await db.rawQuery(sql);
+    valorMedia = 
+    
+    return valorMedia;
+  }
+
+*/
+
 }
