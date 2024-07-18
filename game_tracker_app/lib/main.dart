@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:game_tracker_app/paginas/home.dart';
 import 'package:game_tracker_app/paginas/cadastro.dart';
 import 'package:game_tracker_app/paginas/meusJogos.dart';
+import 'package:game_tracker_app/paginas/adicionaResenha.dart';
+import 'package:game_tracker_app/paginas/pageJogo.dart';
 import 'package:game_tracker_app/paginas/login.dart';
 import 'package:game_tracker_app/paginas/todosJogos.dart';
 import 'package:game_tracker_app/helper/DatabaseHelper.dart';
@@ -28,7 +30,8 @@ void main() async {
       Login.rota: (context) => Login(),
       Cadastro.rota: (context) => Cadastro(),
       MeusJogos.rota: (context) => MeusJogos('visitante'),
-      TodosJogos.rota: (context) => TodosJogos()
+      TodosJogos.rota: (context) => TodosJogos(),
+      Home.rota: (context) => Home(),
     },
   ));
 }
