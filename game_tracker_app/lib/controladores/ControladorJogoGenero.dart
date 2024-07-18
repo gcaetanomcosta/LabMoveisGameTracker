@@ -1,5 +1,6 @@
 import 'package:game_tracker_app/Jogo.dart';
 import 'package:game_tracker_app/Genero.dart';
+import 'package:game_tracker_app/JogoGenero.dart';
 import 'package:game_tracker_app/helper/DatabaseHelper.dart';
 
 class ControladorJogoGenero {
@@ -62,5 +63,21 @@ class ControladorJogoGenero {
 
     int res = await db.delete("game_genre", where: "game_id = ? AND genre_id = ?", whereArgs: [jogo.id, genero.id]);
     return res;
+  }
+
+  Future<List<JogoGenero>> getTodasAssociacoes() async {
+    List<JogoGenero> associacoes = [];
+    var db = await con.db;
+
+    String sql = """
+      SELECT * FROM game_genre;
+    """;
+
+    var ret = await db.rawQuery(sql);
+    for (int i = 0; i < ret.length; i++) {
+      associacoes.add(JogoGenero.fromMap(ret[i]));
+    }
+
+    return associacoes;
   }
 }

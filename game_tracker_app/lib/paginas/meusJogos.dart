@@ -3,7 +3,6 @@ import 'package:game_tracker_app/paginas/todosJogos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:game_tracker_app/controladores/ControladorJogos.dart';
 import 'package:game_tracker_app/Jogo.dart';
-import 'package:game_tracker_app/Usuario.dart';
 import 'package:game_tracker_app/paginas/home.dart';
 import 'package:game_tracker_app/paginas/pageJogo.dart';
 import 'package:game_tracker_app/paginas/adicionarJogo.dart';
@@ -77,175 +76,76 @@ class _MeusJogosState extends State<MeusJogos> {
                 future: getListaJogosUsuario(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   return Padding(
-                      padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                      child: GridView.builder(
-                        itemCount: snapshot.data!.length + 1,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: nJogosRows,
-                          childAspectRatio: 1 / 1.7,
-                        ),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
+                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: GridView.count(
+                      crossAxisCount: nJogosRows,
+                      children: List.generate(
+                        snapshot.data!.length + 1,
+                        (index) => (
+                          index < snapshot.data!.length
+                          
+                          ? Card(
+                            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                             color: Colors.amber,
-                            margin: EdgeInsets.all(5),
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-
-
-                              children: [
-                                if(index < snapshot.data!.length)
-                                  MouseRegion(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PageJogo(snapshot.data![index]),
-                                          ),
-                                        );
-                                      },
-                                      child: AnimatedContainer(
-                                        duration: Duration(milliseconds: 200),
-                                        decoration: BoxDecoration(
-                                            color: Colors.amber,
-                                            borderRadius: BorderRadius.circular(10),
-                                            boxShadow: [
-                                              /*BoxShadow(
-                                                //color: _isHovering,
-                                                spreadRadius: 
-                                              )*/
-                                            ]),
-                                        child: 
-                                        
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          margin: EdgeInsets.all(3),
-                                          child: Column(
-                                            
-                                            children: [
-                                              ClipRRect(
-                                                  borderRadius: BorderRadius.only(
-                                                      topLeft: Radius.circular(10),
-                                                      topRight: Radius.circular(10),
-                                                      bottomLeft: Radius.zero,
-                                                      bottomRight: Radius.zero),
-                                                  child: Image.asset(
-                                                    'lib/assets/${snapshot.data![index].id}.png',
-                                                    fit: BoxFit.cover,
-                                                  )),
-                                              Expanded(
-                                                child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    snapshot.data![index].name ??
-                                                        'Sem nome',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.bold),
-                                                  ),
-                                                ),
-                                              ),
-                                            ]),
-                                        ),
+                            child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PageJogo(snapshot.data![index]),
                                       ),
-                                    ),
-                                  ),
-                                if(index == snapshot.data!.length)
+                                    );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius.circular(10)),
+                                  margin: EdgeInsets.all(3),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      ClipRRect(
+                                        child: Image.asset(
+                                          width: 225.0,
 
-
-
-
-
-
-
-                                  MouseRegion(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                AdicionarJogo(),
+                                          'lib/assets/${snapshot.data![index].id}.png',
+                                          fit: BoxFit.fitWidth,
+                                        )),
+                                      Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        child: Center(child: Text(
+                                          snapshot.data![index].name,
+                                          textAlign: TextAlign.center,
+                                          
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromRGBO(50, 25, 10, 1)
                                           ),
-                                        );
-                                      },
-                                      child: AnimatedContainer(
-                                        duration: Duration(milliseconds: 200),
-                                        decoration: BoxDecoration(
-                                            color: Colors.amber,
-                                            borderRadius: BorderRadius.circular(10),
-                                            boxShadow: [
-                                              /*BoxShadow(
-                                                //color: _isHovering,
-                                                spreadRadius: 
-                                              )*/
-                                            ]),
-                                        child: 
-                                        
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          margin: EdgeInsets.all(3),
-                                          child: const Column(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(10),
-                                                    topRight: Radius.circular(10),
-                                                    bottomLeft: Radius.zero,
-                                                    bottomRight: Radius.zero),
-                                                child: Icon(Icons.logout_sharp)
-                                              ),
-                                              Expanded(
-                                                child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                        'Adicionar Jogo',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.bold
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ]),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  
-
-
-
-                                
-                              ]
-                            )
-                            
-                            
-                            
-                            
-                            
-                            
-
-
-
-
-
-
-                          );
-                        },
-                      ));
+                                        ))
+                                      )
+                                    
+                                  ]),
+                                ),
+                              ),
+                          )
+                          : Card(
+                              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              color: Color.fromRGBO(255, 245, 210, 1),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, AdicionarJogo.rota);
+                                },
+                                child: Center(child: const Icon(Icons.add, size: 200, color: Color.fromRGBO(50, 25, 10, 1))),
+                              ),
+                          )
+                          
+                        ),
+                      ),
+                    )
+                  );
                 })));
   }
 }

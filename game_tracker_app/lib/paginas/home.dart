@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker_app/paginas/cadastro.dart';
-import 'package:game_tracker_app/paginas/meusJogos.dart';
 import 'package:game_tracker_app/paginas/todosJogos.dart';
 import 'package:game_tracker_app/paginas/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';

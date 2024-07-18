@@ -56,6 +56,26 @@ class ControladorReview {
 
     return reviews;
   }
+
+  Future<List<Review>> getReviewsRecentes() async {
+    var db = await con.db;
+    List<Review> reviewsRecentes = [];
+    DateTime agora = DateTime.now();
+
+    String sql = """
+      SELECT * FROM review;
+    """;
+
+    List<Map<String, dynamic>> todasReviews = await db.rawQuery(sql);
+
+    for (int i = 0; i < todasReviews.length; i++) {
+      if (agora.difference(DateTime.parse(todasReviews[i]["date"] + "00:00:00Z")).inDays <= 7) {
+        reviewsRecentes.add(Review.fromMap(todasReviews[i]));
+      }
+    }
+
+    return reviewsRecentes;
+  }
   /*
   Future<DateTime> getDataReview(Review review) async {
     var db = await con.db;
@@ -69,23 +89,25 @@ class ControladorReview {
   }*/
 
   
-/*
+ 
   //Adicionando para pegar o valor das medias
   Future<double> getMediaReviews(int game_id) async{
     var db = await con.db;
+    dynamic val;
     double valorMedia = 0.0;
     
     
     String sql = """
-      SELECT AVG(score) FROM review WHERE game_id = '${game_id}';
+      SELECT AVG(score) AS media FROM review WHERE game_id = '${game_id}';
     """;
     
     var ret = await db.rawQuery(sql);
-    valorMedia = 
+    val = ret.first["media"];
+    valorMedia = val.toDouble();
     
     return valorMedia;
   }
 
-*/
+
 
 }

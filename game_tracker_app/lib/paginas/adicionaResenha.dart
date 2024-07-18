@@ -3,10 +3,7 @@ import 'package:intl/intl.dart';
 import 'dart:math';
 import 'package:game_tracker_app/Jogo.dart';
 import 'package:game_tracker_app/Review.dart';
-import 'package:game_tracker_app/paginas/meusJogos.dart';
-import 'package:game_tracker_app/Jogo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:game_tracker_app/controladores/ControladorJogos.dart';
 import 'package:game_tracker_app/controladores/ControladorReview.dart';
 
 class AdicionaResenha extends StatefulWidget {
@@ -95,8 +92,9 @@ class _AdicionaResenhaState extends State<AdicionaResenha> {
         return;
       }
 
-      final now = DateTime.now();
-      String dataFormatada = DateFormat('yMd').format(now);
+      DateTime now = DateTime.now();
+      String dataFormatada = DateFormat('yyyy-MM-dd hh:mm:ss').format(now);
+      /* String dataFormatada = DateFormat('yMd').format(now); */
 
       try {
         Review resenha = Review(
@@ -110,6 +108,12 @@ class _AdicionaResenhaState extends State<AdicionaResenha> {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Resenha salva com sucesso!')));
         Navigator.of(context).pop(); // Navega de volta para a tela anterior
+        /*Navigator.push(context,
+          MaterialPageRoute(                                        
+            builder: (context) => AdicionaResenha(widget.jogoSelecionado),
+          ),
+        );*/
+
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Erro ao salvar a resenha: ${e.toString()}')));

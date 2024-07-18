@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:game_tracker_app/paginas/home.dart';
 import 'package:game_tracker_app/paginas/cadastro.dart';
 import 'package:game_tracker_app/paginas/meusJogos.dart';
-import 'package:game_tracker_app/paginas/adicionaResenha.dart';
-import 'package:game_tracker_app/paginas/pageJogo.dart';
 import 'package:game_tracker_app/paginas/login.dart';
+import 'package:game_tracker_app/paginas/reviewsRecentes.dart';
 import 'package:game_tracker_app/paginas/todosJogos.dart';
 import 'package:game_tracker_app/helper/DatabaseHelper.dart';
-import "package:sqflite/sqflite.dart";
-import 'package:path/path.dart';
+import 'package:game_tracker_app/paginas/adicionarJogo.dart';
+
 
 void main() async {
   //String databasePath = await getDatabasesPath();
@@ -32,6 +31,8 @@ void main() async {
       MeusJogos.rota: (context) => MeusJogos('visitante'),
       TodosJogos.rota: (context) => TodosJogos(),
       Home.rota: (context) => Home(),
+      ReviewsRecentes.rota: (context) => ReviewsRecentes(),
+      AdicionarJogo.rota: (context) => AdicionarJogo()
     },
   ));
 }

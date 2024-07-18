@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:game_tracker_app/Jogo.dart';
-import 'package:game_tracker_app/paginas/meusJogos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:game_tracker_app/controladores/ControladorJogos.dart';
 
@@ -126,6 +125,11 @@ class _AdicionarJogoState extends State<AdicionarJogo> {
                     },
                   ),
                     
+                  SizedBox(height: 30),
+
+                  
+
+
                   SizedBox(height: 30),
 
                   TextField(
