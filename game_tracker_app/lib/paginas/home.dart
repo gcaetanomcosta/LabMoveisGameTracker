@@ -12,7 +12,14 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
-  
+
+  @override
+  void initState() {
+    super.initState();
+
+    deslogar();
+  }
+
   void deslogar() async {
     SharedPreferences preferencias = await SharedPreferences.getInstance();
 
@@ -22,17 +29,19 @@ class _Home extends State<Home> {
       preferencias.setString("apelido", "");
       preferencias.setString("email", "");
       preferencias.setString("senha", "");
+      preferencias.setInt("id", -1);
       //_loginStatus = LoginStatus.notSignIn;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    deslogar();
+    //deslogar();
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Game Tracker"),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.amber,
       ),
       body: Center(
@@ -80,11 +89,9 @@ class _Home extends State<Home> {
               child: ElevatedButton(
                   onPressed: () =>
                       Navigator.pushNamed(context, TodosJogos.rota),
-                  child: Text("Entrar sem cadastro"))
-          ),
-          
+                  child: Text("Entrar sem cadastro"))),
           SizedBox(height: 10),
-          
+
           //SizedBox(
           //    width: 200,
           //    child: ElevatedButton(
