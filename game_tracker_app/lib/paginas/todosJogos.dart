@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:game_tracker_app/Genero.dart';
+import 'package:game_tracker_app/controladores/ControladorGenero.dart';
 import 'package:game_tracker_app/paginas/home.dart';
 import 'package:game_tracker_app/paginas/login.dart';
 import 'package:game_tracker_app/paginas/meusJogos.dart';
@@ -19,12 +21,17 @@ class TodosJogos extends StatefulWidget {
 
 class _TodosjogosState extends State<TodosJogos> {
   ControladorJogos ctrlJogos = ControladorJogos();
+  ControladorGenero ctrlGeneros = ControladorGenero();
   DatabaseHelper dbHelper = DatabaseHelper();
 
   late Future<List<Jogo>> allGames;
+  late Future<List<Genero>> allGenres;
 
   List<Jogo> searchGames = [];
   List<Jogo> filteredGames = [];
+
+  List<Genero> searchGenres = [];
+  String? selectedGenre;
 
   int linhaJOgos = 3;
 
@@ -32,11 +39,14 @@ class _TodosjogosState extends State<TodosJogos> {
 
   late int? idDoUsuario;
 
+
   @override
   void initState() {
     super.initState();
 
     estaLogado();
+
+    allGenres = inicializarTodosGeneros();
 
     allGames = incicializarTodosJogos();
   }
@@ -61,56 +71,56 @@ class _TodosjogosState extends State<TodosJogos> {
     if (jogos.isEmpty) {
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 41,
-          user_id: 1177993575,
+          user_id: 462296382,
           name: "Zelda: Tears of The Kingdom",
           description:
               "Embarque em uma busca épica para salvar o reino de Hyrule. Adquira novas habilidades, use a icônica Master Sword além de itens especiais, que ajudam a superar obstáculos e derrotar inimigos.",
           release_date: "12/05/2023"));
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 42,
-          user_id: 51177993575,
+          user_id: 462296382,
           name: "Super Mario Odissey",
           description:
               "Explore lugares incríveis longe do Reino Cogumelo com o Mario e o novo aliado Cappy em uma imensa aventura 3D ao redor do mundo.",
           release_date: "27/10/2017"));
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 43,
-          user_id: 1177993575,
+          user_id: 462296382,
           name: "Luigi's Mansion 3",
           description:
               "Luigi deve explorar um hotel assombrado, incorporando temáticas diferentes em cada andar, e resgatar seus amigos dos fantasmas que o habitam.",
           release_date: "31/10/2019"));
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 44,
-          user_id: 1177993575,
+          user_id: 462296382,
           name: "Pokémon Violet",
           description:
               "Capture, lute e treine Pokémon na região de Paldea, uma vasta área cheia de lagos, picos imponentes, desertos, vilarejos e cidades em expansão. Explore o mundo aberto montado no Pokémon lendário que muda de forma",
           release_date: "18/11/2022"));
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 45,
-          user_id: 51177993575,
+          user_id: 462296382,
           name: "Pokémon: Let's Go, Pikachu!",
           description:
               "Capture e colecione Pokémon em uma aventura diversa e vibrante no jogo Pokémon™: Torne-se o melhor Treinador de Pokémon que puder, enquanto batalha outros Treinadores, Líderes de Ginásios e a sinistra Equipe Rocket.",
           release_date: "16/11/2018"));
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 46,
-          user_id: 50,
+          user_id: 462296382,
           name: "League of Legends",
           description:
               "Jogo de estratégia onde duas equipes de cinco campeões se enfrentam para destruir a base adversária. Escolha entre mais de 140 campeões para fazer jogadas épicas, garantir mortes e derrubar torres enquanto luta para chegar à vitória.",
           release_date: "27/11/2009"));
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 47,
-          user_id: 50,
+          user_id: 462296382,
           name: "DOTA",
           description:
               "Jogo de equipe competitivo com elementos de RPG. Duas equipes rivais (Iluminados e Temidos) com cinco jogadores cada. O objetivo principal é destruir o Ancestral inimigo dentro de sua fortaleza.",
           release_date: "09/07/2013"));
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 48,
-          user_id: 50,
+          user_id: 462296382,
           name: "Hades",
           description:
               "Hades é um RPG de ação e exploração de masmorras rogue-like. Utilize o poder de armas míticas do Olimpo para escapar das garras do deus da morte, ficando cada vez mais forte a cada nova tentativa de fuga.",
@@ -135,7 +145,7 @@ class _TodosjogosState extends State<TodosJogos> {
           name: "Marvel Rivals",
           description:
               "Marvel Rivals é um jogo de tiro PVP baseado em equipes com super-heróis do Universo Marvel, desenvolvido pela Marvel Games e NetEase Games",
-          release_date: "- / - / -"));
+          release_date: "30/2/2026"));
       await ctrlJogos.cadastrarJogo(Jogo(
           id: 52,
           user_id: 50,
@@ -169,6 +179,29 @@ class _TodosjogosState extends State<TodosJogos> {
     return jogos;
   }
 
+  Future<List<Genero>> inicializarTodosGeneros() async {
+    List<Genero> generos = await ctrlGeneros.getTodosGeneros();
+
+    if (generos.isEmpty) {
+      await ctrlGeneros.cadastrarGenero(Genero(id: 40, name: "Moba"));
+      await ctrlGeneros.cadastrarGenero(Genero(id: 41, name: "RPG"));
+      await ctrlGeneros.cadastrarGenero(Genero(id: 42, name: "Souls-Like"));
+      await ctrlGeneros.cadastrarGenero(Genero(id: 43, name: "Simulação"));
+      await ctrlGeneros.cadastrarGenero(Genero(id: 44, name: "Hero-Shooter"));
+      await ctrlGeneros.cadastrarGenero(Genero(id: 45, name: "RogueLike"));
+      await ctrlGeneros.cadastrarGenero(Genero(id: 46, name: "Plataforma"));
+      await ctrlGeneros.cadastrarGenero(Genero(id: 47, name: "Acão-Aventura"));
+    }
+
+    generos = await ctrlGeneros.getTodosGeneros();
+
+    setState(() {
+      searchGenres = generos;
+    });
+
+    return generos;
+  }
+
   void runFilter(String pesquisa) {
     List<Jogo> resposta = [];
     if (pesquisa.isEmpty) {
@@ -182,20 +215,6 @@ class _TodosjogosState extends State<TodosJogos> {
 
     setState(() {
       filteredGames = resposta;
-    });
-  }
-
-  void deslogar() async {
-    SharedPreferences preferencias = await SharedPreferences.getInstance();
-
-    // APAGAR DADOS DE APELIDO, EMAIL E SENHA EM "preferencias"
-    setState(() {
-      preferencias.setInt("value", -1);
-      preferencias.setString("apelido", "");
-      preferencias.setString("email", "");
-      preferencias.setString("senha", "");
-      preferencias.setInt("id", -1);
-      //_loginStatus = LoginStatus.notSignIn;
     });
   }
 
@@ -215,14 +234,12 @@ class _TodosjogosState extends State<TodosJogos> {
                   icon: const Icon(Icons.account_circle)),
               IconButton(
                   onPressed: () {
-                    //deslogar();
                     Navigator.pushNamed(context, Home.rota);
                   },
                   icon: const Icon(Icons.logout_sharp))
             ] else ...[
               IconButton(
                   onPressed: () {
-                    //deslogar();
                     Navigator.pushNamed(context, Home.rota);
                   },
                   icon: const Icon(Icons.vpn_key))
@@ -243,11 +260,57 @@ class _TodosjogosState extends State<TodosJogos> {
                   padding: EdgeInsets.all(15),
                   child: Column(
                     children: [
-                      TextField(
-                        onChanged: (value) => runFilter(value),
-                        decoration: const InputDecoration(
-                            labelText: 'Pesquisar',
-                            suffixIcon: Icon(Icons.search)),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: TextField(
+                              onChanged: (value) => runFilter(value),
+                              decoration: InputDecoration(
+                                  labelText: 'Pesquisar',
+                                  suffixIcon: Icon(Icons.search),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            flex: 4,
+                            child: FutureBuilder<List<Genero>>(
+                                future: allGenres,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Erro: ${snapshot.error}');
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    return Text('Nenhum gênero encontrado.');
+                                  } else {
+                                    return DropdownButtonFormField(
+                                      //padding: EdgeInsets.symmetric(vertical: 15),
+                                      value: selectedGenre,
+                                      hint: Text("Gêneros"),
+                                      items: searchGenres.map((Genero genero) {
+                                        return DropdownMenuItem<String>(
+                                          value: genero.name,
+                                          child: Text(genero.name!),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedGenre = value;
+                                          //runFilter("");
+                                        });
+                                      },
+                                      decoration: InputDecoration(
+                                        //contentPadding: Edge
+                                      ),
+                                    );
+                                  }
+                                }),
+                          )
+                        ],
                       ),
                       SizedBox(height: 20),
                       Expanded(
@@ -280,41 +343,44 @@ class _TodosjogosState extends State<TodosJogos> {
                                   child: AnimatedContainer(
                                     duration: Duration(milliseconds: 200),
                                     decoration: BoxDecoration(
-                                      color: Colors.amber,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        /*BoxShadow(
+                                        color: Colors.amber,
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          /*BoxShadow(
                                           //color: _isHovering,
                                           spreadRadius: 
                                         )*/
-                                      ] 
-                                    ),
+                                        ]),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       margin: EdgeInsets.all(3),
-                                      child: Column(
-                                        children:[
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10),bottomLeft: Radius.zero, bottomRight: Radius.zero),
-                                            child: Image.asset('lib/assets/${filteredGames[index].id}.png',
+                                      child: Column(children: [
+                                        ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.zero,
+                                                bottomRight: Radius.zero),
+                                            child: Image.asset(
+                                              'lib/assets/${filteredGames[index].id}.png',
                                               fit: BoxFit.cover,
-                                            )
-                                          ),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: Alignment.center,
-                                              child: Text(filteredGames[index].name ?? 'Sem nome',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold
-                                                ),
-                                              ),
+                                            )),
+                                        Expanded(
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              filteredGames[index].name ??
+                                                  'Sem nome',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
-                                        ] 
-                                      ),
+                                        ),
+                                      ]),
                                     ),
                                   ),
                                 ),
