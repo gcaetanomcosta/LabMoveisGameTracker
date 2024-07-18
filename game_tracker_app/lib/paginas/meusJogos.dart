@@ -5,6 +5,8 @@ import 'package:game_tracker_app/controladores/ControladorJogos.dart';
 import 'package:game_tracker_app/Jogo.dart';
 import 'package:game_tracker_app/Usuario.dart';
 import 'package:game_tracker_app/paginas/home.dart';
+import 'package:game_tracker_app/paginas/pageJogo.dart';
+import 'package:game_tracker_app/paginas/adicionarJogo.dart';
 
 class MeusJogos extends StatefulWidget {
   String usuario;
@@ -17,29 +19,18 @@ class MeusJogos extends StatefulWidget {
 }
 
 class _MeusJogosState extends State<MeusJogos> {
+
+  
   Future<List<Jogo>> getListaJogosUsuario() async {
     SharedPreferences preferencias = await SharedPreferences.getInstance();
     int id = preferencias.getInt('id')!;
+    widget.usuario = preferencias.getString("apelido")!;
     ControladorJogos ctrlJogos = ControladorJogos();
+
+    setState(() {});
+
     return ctrlJogos.getJogosUsuario(id);
   }
-
-  /*
-    try {
-
-      List<Jogo> listaJogosUsuario = await ctrlJogos.getJogosUsuario(id);
-
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
-    }
-
-
-  int nJogos = (await ctrlJogos.getJogosUsuario(await getIdUsuario())).length;
-  */
-
-  //List<Jogo> listaJogosUsuario = await ctrlJogos.getJogosUsuario('');
-  //int nJogos = 7;
 
   @override
   Widget build(BuildContext context) {
@@ -58,19 +49,14 @@ class _MeusJogosState extends State<MeusJogos> {
       nJogosRows = 1;
     }
 
-    //ControladorJogos ctrlJogos = ControladorJogos();
-    //ctrlJogos.cadastrarJogo(Jogo(id:0921381, user_id:1266496943, name:'undertale', description: 'Jogo indie produzido por Toby Fox que conta a história de um mundo abaixo do nosso, cheio de magias e perigos.', release_date: '2015-09-15'));
-
     return Container(
         child: Scaffold(
             appBar: AppBar(
-              title: Center(
-                  child: Text(
-                      'Game Tracker APP - Meus Jogos de ${widget.usuario}',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24))),
+              title: Text('Meus Jogos - ${widget.usuario}',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24)),
               backgroundColor: Colors.amber,
               automaticallyImplyLeading: false,
               actions: [
@@ -92,17 +78,173 @@ class _MeusJogosState extends State<MeusJogos> {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   return Padding(
                       padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                      child: GridView.count(
-                        crossAxisCount: nJogosRows,
-                        children: List.generate(
-                          snapshot.data!.length,
-                          (index) => Card(
-                            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            color: Colors.red,
-                            //child: Center(child: Text('Item $index')),
-                            child: Center(child: Text('Item $index')),
-                          ),
+                      child: GridView.builder(
+                        itemCount: snapshot.data!.length + 1,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: nJogosRows,
+                          childAspectRatio: 1 / 1.7,
                         ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            color: Colors.amber,
+                            margin: EdgeInsets.all(5),
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+
+
+                              children: [
+                                if(index < snapshot.data!.length)
+                                  MouseRegion(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                PageJogo(snapshot.data![index]),
+                                          ),
+                                        );
+                                      },
+                                      child: AnimatedContainer(
+                                        duration: Duration(milliseconds: 200),
+                                        decoration: BoxDecoration(
+                                            color: Colors.amber,
+                                            borderRadius: BorderRadius.circular(10),
+                                            boxShadow: [
+                                              /*BoxShadow(
+                                                //color: _isHovering,
+                                                spreadRadius: 
+                                              )*/
+                                            ]),
+                                        child: 
+                                        
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          margin: EdgeInsets.all(3),
+                                          child: Column(
+                                            
+                                            children: [
+                                              ClipRRect(
+                                                  borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(10),
+                                                      topRight: Radius.circular(10),
+                                                      bottomLeft: Radius.zero,
+                                                      bottomRight: Radius.zero),
+                                                  child: Image.asset(
+                                                    'lib/assets/${snapshot.data![index].id}.png',
+                                                    fit: BoxFit.cover,
+                                                  )),
+                                              Expanded(
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    snapshot.data![index].name ??
+                                                        'Sem nome',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                if(index == snapshot.data!.length)
+
+
+
+
+
+
+
+                                  MouseRegion(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                AdicionarJogo(),
+                                          ),
+                                        );
+                                      },
+                                      child: AnimatedContainer(
+                                        duration: Duration(milliseconds: 200),
+                                        decoration: BoxDecoration(
+                                            color: Colors.amber,
+                                            borderRadius: BorderRadius.circular(10),
+                                            boxShadow: [
+                                              /*BoxShadow(
+                                                //color: _isHovering,
+                                                spreadRadius: 
+                                              )*/
+                                            ]),
+                                        child: 
+                                        
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          margin: EdgeInsets.all(3),
+                                          child: const Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(10),
+                                                    topRight: Radius.circular(10),
+                                                    bottomLeft: Radius.zero,
+                                                    bottomRight: Radius.zero),
+                                                child: Icon(Icons.logout_sharp)
+                                              ),
+                                              Expanded(
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                        'Adicionar Jogo',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  
+
+
+
+                                
+                              ]
+                            )
+                            
+                            
+                            
+                            
+                            
+                            
+
+
+
+
+
+
+                          );
+                        },
                       ));
                 })));
   }

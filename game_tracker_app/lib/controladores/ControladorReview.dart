@@ -40,6 +40,35 @@ class ControladorReview {
 
     return reviews;
   }
+
+  Future<List<Review>> getTodasReviews() async {
+    var db = await con.db;
+    List<Review> reviews = [];
+
+    String sql = """
+      SELECT * FROM review;
+    """;
+
+    var ret = await db.rawQuery(sql);
+
+    for (int i = 0; i < ret.length; i++)
+      reviews.add(Review.fromMap(ret[i]));
+
+    return reviews;
+  }
+  /*
+  Future<DateTime> getDataReview(Review review) async {
+    var db = await con.db;
+    
+    String sql = """
+      SELECT date FROM review WHERE id = ${review.id};
+    """;
+
+    String res = db.rawQuery(sql);
+    return DateTime.parse(res + " 00:00:00");
+  }*/
+
+  
 /*
   //Adicionando para pegar o valor das medias
   Future<double> getMediaReviews(int game_id) async{
